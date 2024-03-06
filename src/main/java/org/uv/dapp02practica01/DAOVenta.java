@@ -59,12 +59,15 @@ public class DAOVenta implements IDAO<Venta> {
 
     @Override
     public boolean modificar(Venta p) {
-        SessionFactory sf = HibernateUtil.getSessionFactory();
-        Session session = sf.getCurrentSession();
-        Transaction tran = session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().getCurrentSession()) {
+            session.beginTransaction();
             session.update(p);
-            tran.commit();
+            session.getTransaction().commit();
             return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
         
     }
 
@@ -73,20 +76,24 @@ public class DAOVenta implements IDAO<Venta> {
         SessionFactory sf = HibernateUtil.getSessionFactory();
         Session session = sf.getCurrentSession();
         Transaction tran = session.beginTransaction();
-            session.delete(p);
-            tran.commit();
-            return true;
+        session.delete(p);
+
+        tran.commit();
+        return true;
         
     }
 
     @Override
-    public Venta buscarById(int id) {
-        SessionFactory sf = HibernateUtil.getSessionFactory();
-        Session session = sf.getCurrentSession();
-        Transaction tran = session.beginTransaction();
+    public Venta buscarById(long id) {
+        try (Session session = HibernateUtil.getSessionFactory().getCurrentSession()) {
+            session.beginTransaction();
             Venta venta = session.get(Venta.class, id);
-            tran.commit();
+            session.getTransaction().commit();
             return venta;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
         
     }
 

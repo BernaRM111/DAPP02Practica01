@@ -14,6 +14,6 @@ public interface IDAO <T>{
     public boolean guardar(T p);
     public boolean modificar(T p);
     public boolean eliminar(T p);
-    public T buscarById(int id);
+    public T buscarById(long id);
     public List<T> buscarAll();
 }

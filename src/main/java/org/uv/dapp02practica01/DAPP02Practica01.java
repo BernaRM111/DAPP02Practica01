@@ -86,16 +86,36 @@ public class DAPP02Practica01 {
                     break;
                 case 2:
                     // Modificar venta
-//                    System.out.print("Ingrese el ID de la venta a modificar: ");
-//                    long idModificar = scanner.nextLong();
-//                    scanner.nextLine(); // Consumir el salto de línea
-//
-//                    Venta ventaModificar = daoVenta.buscarById(idModificar);
-//
+                    System.out.print("Ingrese el ID de la venta a modificar: ");
+                    long idModificar = scanner.nextLong();
+                    scanner.nextLine(); // Consumir el salto de línea
+
+                    Venta ventaModificar = daoVenta.buscarById(idModificar);
+
+                    if (ventaModificar == null) {
+                        System.out.println("No se encontró");
+                        return;
+                    }
+                    System.out.print("Ingrese el nuevo nombre del cliente: ");
+                    String nuevoCliente = scanner.nextLine();
+                    ventaModificar.setCliente(nuevoCliente);
+                    
+                    ventaModificar.setFechaventa(new java.sql.Date(new Date().getTime()));
+                    
+                    System.out.print("Ingrese el nuevo total de la venta: ");
+                    double nuevoTotal = scanner.nextDouble();
+                    ventaModificar.setTotal(nuevoTotal);
+                    
+                    daoVenta.modificar(ventaModificar);
+
+                    System.out.println("Actualizado exitosamente");
+
 //                    if (ventaModificar != null) {
 //                        System.out.print("Ingrese el nuevo nombre del cliente: ");
 //                        String nuevoCliente = scanner.nextLine();
 //                        ventaModificar.setCliente(nuevoCliente);
+//
+//                        ventaModificar.setFechaventa(new java.sql.Date(new Date().getTime()));
 //
 //                        System.out.print("Ingrese el nuevo total de la venta: ");
 //                        double nuevoTotal = scanner.nextDouble();
@@ -111,45 +131,48 @@ public class DAPP02Practica01 {
                     break;
                 case 3:
                     // Eliminar venta
-//                    System.out.print("Ingrese el ID de la venta a eliminar: ");
-//                    long idEliminar = scanner.nextLong();
-//                    scanner.nextLine(); // Consumir el salto de línea
-//
-//                    Venta ventaEliminar = daoVenta.buscarById(idEliminar);
-//
-//                    if (ventaEliminar != null) {
-//                        Transaction transactionEliminar = session.beginTransaction();
-//                        daoVenta.eliminar(ventaEliminar);
-//                        transactionEliminar.commit();
-//                        System.out.println("Venta eliminada correctamente.");
-//                    } else {
-//                        System.out.println("Venta no encontrada.");
-//                    }
+                    System.out.print("Ingrese el ID de la venta a eliminar: ");
+                    long idEliminar = scanner.nextLong();
+                    scanner.nextLine(); // Consumir el salto de línea
+
+                    Venta ventaEliminar = daoVenta.buscarById(idEliminar);
+
+                    if (ventaEliminar == null) {
+                        System.out.println("No se encontró");
+                        return;
+                    }
+
+                    daoVenta.eliminar(ventaEliminar);
+                    System.out.println("Venta eliminada exitosamente.");
                     break;
                 case 4:
-                    // Buscar venta por ID
-//                    System.out.print("Ingrese el ID de la venta a buscar: ");
-//                    long idBuscar = scanner.nextLong();
-//                    scanner.nextLine(); // Consumir el salto de línea
-//
-//                    Venta ventaBuscar = daoVenta.buscarById((int) idBuscar);
-//
-//                    if (ventaBuscar != null) {
-//                        System.out.println("Venta encontrada:");
-//                        System.out.println("ID: " + ventaBuscar.getId());
-//                        System.out.println("Cliente: " + ventaBuscar.getCliente());
-//                        System.out.println("Fecha de venta: " + ventaBuscar.getFechaventa());
-//                        System.out.println("Total: " + ventaBuscar.getTotal());
-//                        System.out.println("Detalles de venta:");
-//                        for (DetalleVenta detalle : ventaBuscar.getDetalleVenta()) {
-//                            System.out.println("  Producto: " + detalle.getProducto());
-//                            System.out.println("  Cantidad: " + detalle.getCantidad());
-//                            System.out.println("  Precio unitario: " + detalle.getPrecio());
-//                            System.out.println("");
-//                        }
-//                    } else {
-//                        System.out.println("Venta no encontrada.");
-//                    }
+//                     Buscar venta por ID
+                    System.out.print("Ingrese el ID de la venta a buscar: ");
+                    long idBuscar = scanner.nextLong();
+                    scanner.nextLine(); // Consumir el salto de línea
+
+                    Venta ventaBuscar = daoVenta.buscarById(idBuscar);
+
+                    if (ventaBuscar != null) {
+                        System.out.println("Venta encontrada:");
+                        System.out.println("ID: " + ventaBuscar.getId());
+                        System.out.println("Cliente: " + ventaBuscar.getCliente());
+                        System.out.println("Fecha: " + ventaBuscar.getFechaventa());
+                        System.out.println("Total: " + ventaBuscar.getTotal());
+
+                        List<DetalleVenta> detalles = ventaBuscar.getDetalleVenta();
+                        if (!detalles.isEmpty()) {
+                            System.out.println("Detalles de la venta:");
+                            for (DetalleVenta detalle : detalles) {
+                                System.out.println("   ID Detalle: " + detalle.getId());
+                                System.out.println("   Producto: " + detalle.getProducto());
+                                System.out.println("   Cantidad: " + detalle.getCantidad());
+                                System.out.println("   Precio: " + detalle.getPrecio());
+                            }
+                        }
+                    } else {
+                        System.out.println("No se encontró");
+                    }
                     break;
 
                 case 5:
