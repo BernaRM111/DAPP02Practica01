@@ -6,6 +6,10 @@ package org.uv.dapp02practica01;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.hibernate.Session;
@@ -19,29 +23,231 @@ import org.hibernate.Transaction;
 public class DAPP02Practica01 {
 
     public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+        DAOVenta daoVenta = new DAOVenta();
         SessionFactory sf = HibernateUtil.getSessionFactory();
-
-        PojoEmpleado empleado = new PojoEmpleado();
-        empleado.setNombre("BRM");
-        empleado.setDireccion("av.556");
-        empleado.setTelefono("223344");
-
         Session session = sf.getCurrentSession();
+
+        int opcion;
+        do {
+            System.out.println("MENU");
+            System.out.println("1. Guardar venta");
+            System.out.println("2. Modificar venta");
+            System.out.println("3. Eliminar venta");
+            System.out.println("4. Buscar venta por ID");
+            System.out.println("5. Mostrar todas las ventas");
+            System.out.println("0. Salir");
+            System.out.print("Seleccione una opción: ");
+            opcion = scanner.nextInt();
+            scanner.nextLine(); // Consumir el salto de línea
+
+            switch (opcion) {
+                case 1:
+                    // Guardar venta
+                    Venta ventaGuardar = new Venta();
+//                    ventaGuardar.setCliente("privado");
+                    System.out.print("Ingrese el nombre del cliente: ");
+                    String cliente = scanner.nextLine();
+                    ventaGuardar.setCliente(cliente);
+                    ventaGuardar.setFechaventa(new java.sql.Date(new Date().getTime()));
+                    System.out.print("Ingrese el total de la venta: ");
+                    double total = scanner.nextDouble();
+                    ventaGuardar.setTotal(total);
+
+                    System.out.println("Ingrese la cantidad de detalles de venta:");
+                    int cantidadDetalles = scanner.nextInt();
+                    scanner.nextLine(); // Consumir el salto de línea
+
+                    ventaGuardar.setDetalleVenta(new ArrayList<>());
+
+                    for (int i = 0; i < cantidadDetalles; i++) {
+                        DetalleVenta detalle = new DetalleVenta();
+
+                        System.out.println("Ingrese el nombre del producto:");
+                        String producto = scanner.nextLine();
+                        detalle.setProducto(producto);
+
+                        System.out.println("Ingrese la cantidad:");
+                        int cantidad = scanner.nextInt();
+                        detalle.setCantidad(cantidad);
+                        scanner.nextLine(); // Consumir el salto de línea
+
+                        System.out.println("Ingrese el precio:");
+                        double precio = scanner.nextDouble();
+                        detalle.setPrecio(precio);
+                        scanner.nextLine(); // Consumir el salto de línea
+
+                        detalle.setVenta(ventaGuardar);
+                        ventaGuardar.getDetalleVenta().add(detalle);
+                    }
+
+                    daoVenta.guardar(ventaGuardar);
+                    break;
+                case 2:
+                    // Modificar venta
+//                    System.out.print("Ingrese el ID de la venta a modificar: ");
+//                    long idModificar = scanner.nextLong();
+//                    scanner.nextLine(); // Consumir el salto de línea
+//
+//                    Venta ventaModificar = daoVenta.buscarById(idModificar);
+//
+//                    if (ventaModificar != null) {
+//                        System.out.print("Ingrese el nuevo nombre del cliente: ");
+//                        String nuevoCliente = scanner.nextLine();
+//                        ventaModificar.setCliente(nuevoCliente);
+//
+//                        System.out.print("Ingrese el nuevo total de la venta: ");
+//                        double nuevoTotal = scanner.nextDouble();
+//                        ventaModificar.setTotal(nuevoTotal);
+//
+//                        Transaction transactionModificar = session.beginTransaction();
+//                        daoVenta.modificar(ventaModificar);
+//                        transactionModificar.commit();
+//                        System.out.println("Venta modificada correctamente.");
+//                    } else {
+//                        System.out.println("Venta no encontrada.");
+//                    }
+                    break;
+                case 3:
+                    // Eliminar venta
+//                    System.out.print("Ingrese el ID de la venta a eliminar: ");
+//                    long idEliminar = scanner.nextLong();
+//                    scanner.nextLine(); // Consumir el salto de línea
+//
+//                    Venta ventaEliminar = daoVenta.buscarById(idEliminar);
+//
+//                    if (ventaEliminar != null) {
+//                        Transaction transactionEliminar = session.beginTransaction();
+//                        daoVenta.eliminar(ventaEliminar);
+//                        transactionEliminar.commit();
+//                        System.out.println("Venta eliminada correctamente.");
+//                    } else {
+//                        System.out.println("Venta no encontrada.");
+//                    }
+                    break;
+                case 4:
+                    // Buscar venta por ID
+//                    System.out.print("Ingrese el ID de la venta a buscar: ");
+//                    long idBuscar = scanner.nextLong();
+//                    scanner.nextLine(); // Consumir el salto de línea
+//
+//                    Venta ventaBuscar = daoVenta.buscarById((int) idBuscar);
+//
+//                    if (ventaBuscar != null) {
+//                        System.out.println("Venta encontrada:");
+//                        System.out.println("ID: " + ventaBuscar.getId());
+//                        System.out.println("Cliente: " + ventaBuscar.getCliente());
+//                        System.out.println("Fecha de venta: " + ventaBuscar.getFechaventa());
+//                        System.out.println("Total: " + ventaBuscar.getTotal());
+//                        System.out.println("Detalles de venta:");
+//                        for (DetalleVenta detalle : ventaBuscar.getDetalleVenta()) {
+//                            System.out.println("  Producto: " + detalle.getProducto());
+//                            System.out.println("  Cantidad: " + detalle.getCantidad());
+//                            System.out.println("  Precio unitario: " + detalle.getPrecio());
+//                            System.out.println("");
+//                        }
+//                    } else {
+//                        System.out.println("Venta no encontrada.");
+//                    }
+                    break;
+
+                case 5:
+                    // Mostrar todas las ventas
+                    List<Venta> ventas = daoVenta.buscarAll();
+
+                    System.out.println("Listado de ventas:");
+                    for (Venta venta : ventas) {
+                        System.out.println("ID: " + venta.getId());
+                        System.out.println("Cliente: " + venta.getCliente());
+                        System.out.println("Fecha de venta: " + venta.getFechaventa());
+                        System.out.println("Total: " + venta.getTotal());
+                        System.out.println("Detalles de venta:");
+                        for (DetalleVenta detalle : venta.getDetalleVenta()) {
+                            System.out.println("  Producto: " + detalle.getProducto());
+                            System.out.println("  Cantidad: " + detalle.getCantidad());
+                            System.out.println("  Precio unitario: " + detalle.getPrecio());
+                            System.out.println("");
+                        }
+                    }
+                    break;
+                case 0:
+
+                    break;
+                default:
+                    System.out.println("Opción inválida, por favor intente nuevamente.");
+                    System.out.println("");
+            }
+        } while (opcion != 0);
+
+        scanner.close();
+//        SessionFactory sf = HibernateUtil.getSessionFactory();
+//        Session session = sf.getCurrentSession();
+//        
+//        Venta ven = new Venta();
+//        ven.setCliente("Public General");
+//        ven.setTotal(100.00d);
+////        Date fechaLocal=new Date();
+////        java.sql.Date mifecha= new java.sql.Date(fechaLocal.getTime());
+//        ven.setFechaventa(new java.sql.Date(new Date().getTime()));
+//        
+////        Transaction tran = session.beginTransaction();
+//        //Guardar encabezado
+////        session.save(ven);
+//        
+//        for (int i =0; i < 5; i++ ){
+//            DetalleVenta det = new DetalleVenta();
+//            det.setPrecio(10);
+//            det.setProducto("Producto " + (i+1));
+//            det.setCantidad(10);
+//            det.setVenta(ven);
+//            ven.getDetalleVenta().add(det);
+//        }
+//        
+//        DAOVenta dao = new DAOVenta();
+//        dao.guardar(ven);
+//        
+////        session.save(ven);
+////        tran.commit();
+//        System.out.println("Se guardo con el ID: " + ven.getId());
+//        
+//        
+
+//        PojoEmpleado empleado = new PojoEmpleado();
+//        empleado.setNombre("BRM");
+//        empleado.setDireccion("av.556");
+//        empleado.setTelefono("223344");
+//        Transaction tran = session.beginTransaction();
+//        List<PojoEmpleado> empleados = session.createQuery("FROM PojoEmpleado").list();
+//        tran.commit();
+//        System.out.println("Todos los empleados:");
+//        for (PojoEmpleado emp : empleados) {
+//            System.out.println("ID: " + emp.getId() + ", Nombre: " + emp.getNombre() + ", Direccion: " + emp.getDireccion() + ", Telefono: " + emp.getTelefono());
+//        }
 //        Transaction tran = session.beginTransaction();
 //        session.save(empleado);
 //        tran.commit();
 //        System.out.println("Se guardo con el ID: " + empleado.getId());
-
-        Transaction tran = session.beginTransaction();
-        PojoEmpleado emp1 = session.get(PojoEmpleado.class, 3);
-//        PojoEmpleado emp2 = session.load(PojoEmpleado.class, 1);
-        tran.commit();
-        if (emp1 != null) {
-            System.out.println("Nombre: " + emp1.getNombre());
-        } else {
-            System.out.println("No se encontro");
-        }
-
+        // Buscar por id
+//        Transaction tran = session.beginTransaction();
+//        PojoEmpleado emp1 = session.get(PojoEmpleado.class, 3);
+////        PojoEmpleado emp2 = session.load(PojoEmpleado.class, 1);
+//        tran.commit();
+//        if (emp1 != null) {
+//            System.out.println("Nombre: " + emp1.getNombre());
+//        } else {
+//            System.out.println("No se encontro");
+//        }
+// Eliminar empleado
+//        Transaction tran = session.beginTransaction();
+//        session.delete(3);
+//        tran.commit();
+//        System.out.println("Se elimino correctamente");
+        // Modificar empleado
+//        Transaction tran2 = session.beginTransaction();
+//        emp1.setNombre("Nuevo Nombre");
+//        session.update(emp1);
+//        tran2.commit();
 //        Scanner scanner = new Scanner(System.in);
 //        DAOEmpleado dao = new DAOEmpleado();
 //
